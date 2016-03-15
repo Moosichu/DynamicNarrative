@@ -1,6 +1,12 @@
 package uk.ac.cam.echo2016.multinarrative;
 
 import android.os.BaseBundle;
+import uk.ac.cam.echo2016.multinarrative.io.SaveWriter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The {@code EditableNarrative} used by the {@code FXMLGUI} editor to store the
@@ -18,6 +24,8 @@ import android.os.BaseBundle;
 public class GUINarrative extends EditableNarrative { // TODO Finish
                                                       // Documentation
     private static final long serialVersionUID = 1;
+    private Map<String, BaseBundle> propertyMapping = new HashMap<String, BaseBundle>();
+    protected HashMap<String, String> typemap = new HashMap<String, String>();
 
     public boolean isUniqueId(String id) {
         return (!routes.containsKey(id) && !nodes.containsKey(id));
@@ -26,6 +34,10 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
     public boolean isChoiceNode(String nodeId) throws GraphElementNotFoundException {
         Node node = nodes.get(nodeId);
         return node instanceof ChoiceNode;
+    }
+
+    public void setPropertyType(String property, String type) {
+        typemap.put(property, type);
     }
 
     /**
@@ -42,10 +54,10 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
         if (isUniqueId(id)) {
             Node startNode = getNode(startId);
             if (startNode == null)
-                throw new GraphElementNotFoundException("Node with id: " + startId + " not found");
+                throw new GraphElementNotFoundException(startId);
             Node endNode = getNode(endId);
             if (endNode == null)
-                throw new GraphElementNotFoundException("Node with id: " + endId + " not found");
+                throw new GraphElementNotFoundException(endId);
 
             Route route = new Route(id, startNode, endNode);
             // Updates references of graph and nodes
@@ -92,7 +104,7 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
                 return node.getProperties();
             }
         }
-        throw new GraphElementNotFoundException("Error: Element with id: " + id + " not found");
+        throw new GraphElementNotFoundException(id);
     }
 
     /**
@@ -139,7 +151,7 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
         }
         Route route1 = getRoute(routeId);
         if (route1 == null)
-            throw new GraphElementNotFoundException("Error: Route with id: " + routeId + " not found");
+            throw new GraphElementNotFoundException(routeId);
 
         ChoiceNode choice = new ChoiceNode(newChoiceId);
         // Connect route2 start and end
@@ -204,7 +216,7 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
 
         Route route = getRoute(routeId);
         if (route == null)
-            throw new GraphElementNotFoundException("Error: Route with id: " + routeId + " not found");
+            throw new GraphElementNotFoundException(routeId);
 
         ChoiceNode choice = new ChoiceNode(newChoiceId);
 
@@ -231,7 +243,7 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
     public boolean setStartPoint(String id) throws GraphElementNotFoundException {
         Node node = getNode(id);
         if (node == null)
-            throw new GraphElementNotFoundException("Error: Node with id: " + id + " not found");
+            throw new GraphElementNotFoundException(id);
         if (node instanceof SynchronizationNode) {
             start = (SynchronizationNode) node;
             return true;
@@ -263,34 +275,96 @@ public class GUINarrative extends EditableNarrative { // TODO Finish
         newNode.setProperties(node.getProperties());
         nodes.put(nodeId, newNode);
     }
-    
-    public void setEnd(String routeId, String nodeId) throws GraphElementNotFoundException{
+
+    public void setEnd(String routeId, String nodeId) throws GraphElementNotFoundException {
         Route route = routes.get(routeId);
-        if(route==null){
-            throw new GraphElementNotFoundException("Error: Route with id: " + routeId + " not found");
+        if (route == null) {
+            throw new GraphElementNotFoundException(routeId);
         }
         Node newNode = nodes.get(nodeId);
-        if(newNode==null){
-            throw new GraphElementNotFoundException("Error: Node with id: " + nodeId + " not found");
+        if (newNode == null) {
+            throw new GraphElementNotFoundException(nodeId);
         }
         Node oldNode = route.getEnd();
         oldNode.getEntering().remove(route);
         route.setEnd(newNode);
         newNode.getEntering().add(route);
     }
-    
-    public void setStart(String routeId, String nodeId) throws GraphElementNotFoundException{
+
+    public void setStart(String routeId, String nodeId) throws GraphElementNotFoundException {
         Route route = routes.get(routeId);
-        if(route==null){
-            throw new GraphElementNotFoundException("Error: Route with id: " + routeId + " not found");
+        if (route == null) {
+            throw new GraphElementNotFoundException(routeId);
         }
         Node newNode = nodes.get(nodeId);
-        if(newNode==null){
-            throw new GraphElementNotFoundException("Error: Node with id: " + nodeId + " not found");
+        if (newNode == null) {
+            throw new GraphElementNotFoundException(nodeId);
         }
         Node oldNode = route.getEnd();
         oldNode.getExiting().remove(route);
         route.setStart(newNode);
         newNode.getExiting().add(route);
+    }
+
+    public NarrativeTemplate generateTemplate() throws NonUniqueStartException {
+        HashMap<String, Node> r_nodes = new HashMap<>();
+        HashMap<String, Route> r_routes = new HashMap<>();
+
+        for (Node node : nodes.values()) {
+            Node r_node = node.clone();
+            r_node.createProperties();
+            r_node.getProperties().remove("GUI.X");
+            r_node.getProperties().remove("GUI>Y");
+            r_node.setExiting(new ArrayList<Route>());
+            r_node.setEntering(new ArrayList<Route>());
+            r_nodes.put(node.getId(), r_node);
+        }
+
+        for (Route route : routes.values()) {
+            Route r_route = route.clone();
+            // Find Start and end in r_nodes
+
+            r_route.setStart(r_nodes.get(route.getStart().getId()));
+            r_route.setEnd(r_nodes.get(route.getEnd().getId()));
+            r_route.getStart().getExiting().add(r_route);
+            r_route.getEnd().getEntering().add(r_route);
+
+            r_routes.put(route.getId(), r_route);
+        }
+
+        SynchronizationNode start = null;
+        for (Node node : r_nodes.values()) {
+            if (node.getEntering().size() == 0) {
+                if (start == null) {
+                    start = (SynchronizationNode) node;
+                } else {
+                    throw new NonUniqueStartException();
+                }
+            }
+        }
+        NarrativeTemplate template = new NarrativeTemplate(r_routes, r_nodes, start,
+                BaseBundle.deepcopy(this.properties));
+        return template;
+    }
+
+    public void saveTemplate(String filename) throws NonUniqueStartException, IOException {
+        SaveWriter.saveObject(filename, generateTemplate());
+    }
+
+    public Map<String, BaseBundle> getPropertyMapping() {
+        return propertyMapping;
+    }
+
+    public void createMapping() {
+        if (propertyMapping == null) {
+            propertyMapping = new HashMap<String, BaseBundle>();
+        }
+        if (typemap == null) {
+            typemap = new HashMap<String, String>();
+        }
+    }
+
+    public Map<String, String> getPropertyTypes() {
+        return typemap;
     }
 }

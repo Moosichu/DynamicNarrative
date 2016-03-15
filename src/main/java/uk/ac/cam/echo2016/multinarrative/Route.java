@@ -6,7 +6,8 @@ import android.os.BaseBundle;
 
 /**
  * 
- * Acts as a connection between nodes. Represents the paths that characters follow.
+ * Acts as a connection between nodes. Represents the paths that characters
+ * follow.
  * 
  * @author tr393
  * @author eyx20
@@ -27,9 +28,9 @@ public class Route implements Serializable, Cloneable { // TODO Documentation
         this.start = start;
         this.end = end;
     }
-    
-	public void setup() {
-    	start.getExiting().add(this);
+
+    public void setup() {
+        start.getExiting().add(this);
         end.getEntering().add(this);
     }
 
@@ -70,11 +71,20 @@ public class Route implements Serializable, Cloneable { // TODO Documentation
             properties = new BaseBundle(4);
     }
 
+    public void assignProperties(BaseBundle props) {
+        properties = props;
+    }
+
     public BaseBundle getProperties() {
         return properties;
     }
 
     public void setProperties(BaseBundle b) {
         properties = b;
+    }
+    
+    @Override
+    public String toString() {
+        return id;
     }
 }

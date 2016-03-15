@@ -23,7 +23,7 @@
          <right>
             <VBox BorderPane.alignment="CENTER">
                <children>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addValueAction" text="+">
+                  <Button fx:id="add" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addValueAction" text="+">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>

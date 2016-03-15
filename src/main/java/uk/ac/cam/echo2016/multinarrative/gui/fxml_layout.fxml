@@ -4,6 +4,7 @@
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
@@ -22,6 +23,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
@@ -53,22 +55,49 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#registerNewClicked" text="New" />
-                  <MenuItem mnemonicParsing="false" onAction="#registerOpenClicked" text="Open" />
-                  <MenuItem mnemonicParsing="false" onAction="#registerSaveClicked" text="Save" />
-                  <MenuItem mnemonicParsing="false" onAction="#registerSaveAsClicked" text="Save As..." />
-                  <MenuItem mnemonicParsing="false" text="Export" />
-                  <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#registerNewClicked" text="New">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#registerOpenClicked" text="Open">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#registerSaveClicked" text="Save">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#registerSaveAsClicked" text="Save As...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#registerExportClicked" text="Export">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#close" text="Close">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator></MenuItem>
                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#registerDeleteClicked" text="Delete" />
+                  <MenuItem mnemonicParsing="false" onAction="#registerUndoClicked" text="Undo">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#registerRedoClicked" text="Redo">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Y" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator>
+                  </MenuItem>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="Instructions" />
                   <MenuItem mnemonicParsing="false" onAction="#registerAboutClicked" text="About" />
             </items>
           </Menu>
@@ -102,7 +131,7 @@
                      <content>
                         <BorderPane prefWidth="100.0">
                            <top>
-                              <TextField fx:id="itemName" promptText="Name" BorderPane.alignment="CENTER" />
+                              <TextField fx:id="itemName" onAction="#setNameEntered" promptText="Name" BorderPane.alignment="CENTER" />
                            </top>
                            <center>
                               <ListView fx:id="itemProperties" BorderPane.alignment="CENTER">
@@ -179,7 +208,7 @@
                               <ListView fx:id="nodes" prefWidth="100.0" />
                         </content>
                       </Tab>
-                      <Tab text="Narratives">
+                      <Tab text="Routes">
                         <content>
                               <ListView fx:id="routes" prefWidth="100.0" />
                         </content>

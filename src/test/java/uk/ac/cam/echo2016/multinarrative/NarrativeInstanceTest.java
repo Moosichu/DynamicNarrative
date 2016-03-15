@@ -16,14 +16,14 @@ import android.os.BaseBundle;
 public class NarrativeInstanceTest {
     NarrativeTemplate sampleTemplate;
     NarrativeTemplate loadTemplate;
-    
+
     HashMap<String, Route> sampleRoutes = new HashMap<String, Route>();
     HashMap<String, Node> sampleNodes = new HashMap<String, Node>();
 
     static final int LOAD_SIZE = 100000;
     HashMap<String, Route> loadRoutes = new HashMap<String, Route>();
     HashMap<String, Node> loadNodes = new HashMap<String, Node>();
-    
+
     /**
      * Generic Test - From the Visual Basic Sample Diagram
      */
@@ -168,15 +168,16 @@ public class NarrativeInstanceTest {
         tempRoute.createProperties();
         tempRoute.getProperties().putString("Character", "Jessica");
         sampleRoutes.put(tempRoute.getId(), tempRoute);
-        
+
         // Creates template using the maps created above
         sampleTemplate = new NarrativeTemplate();
         sampleTemplate.routes.putAll(sampleRoutes);
         sampleTemplate.nodes.putAll(sampleNodes);
         sampleTemplate.start = (SynchronizationNode) sampleTemplate.getNode("syncStart");
-        
+
         sampleTemplate.getGlobalProperties().getStringArrayList("System.Types").add("Character");
     }
+
     /**
      * Load Test - binary tree with node "1X" having children "10X" and "11X"
      */
@@ -218,7 +219,7 @@ public class NarrativeInstanceTest {
         startRoute.setup();
         loadNodes.put("start", start);
         loadRoutes.put("startRoute", startRoute);
-        
+
         // Creates template using the maps created above
         loadTemplate = new NarrativeTemplate();
         loadTemplate.routes.putAll(loadRoutes);
@@ -227,7 +228,7 @@ public class NarrativeInstanceTest {
 
     @Test
     public void sampleGenerateTest() throws InvalidGraphException {
-        
+
         // Tests the template constructor - these are for the full sample graph
         assertEquals(24, sampleTemplate.routes.size());
         assertEquals(11, sampleTemplate.nodes.size());
@@ -238,9 +239,9 @@ public class NarrativeInstanceTest {
         // Adds a test property for reference test later
         sampleTemplate.getNode("syncStart").createProperties();
         sampleTemplate.getNode("syncStart").getProperties().putIntArray("TestProperty", new int[] { 1, 2, 3 });
-        
+
         // Copy the template into an instance
-        NarrativeInstance sampleInst = sampleTemplate.generateInstance2();
+        NarrativeInstance sampleInst = sampleTemplate.generateInstance();
 
         // Tests whether the copy has the correct structure
         assertEquals("Testing correct number of routes: ", 24, sampleInst.routes.size());
@@ -251,27 +252,29 @@ public class NarrativeInstanceTest {
                 sampleInst.getNode("choiceJessica1").getExiting().contains(sampleInst.getRoute("routeJessica3")));
         assertTrue("Testing \"sync4\" has route \"routeSam4\" entering:",
                 sampleInst.getNode("sync4").getEntering().contains(sampleInst.getRoute("routeSam4")));
-        assertArrayEquals("Testing Test Property was copied: ", sampleInst.getNode("syncStart").getProperties().getIntArray("TestProperty"), new int[]{1,2,3});
+        assertArrayEquals("Testing Test Property was copied: ",
+                sampleInst.getNode("syncStart").getProperties().getIntArray("TestProperty"), new int[] { 1, 2, 3 });
 
         // Tests whether the copy has different references
         assertNotSame("Testing \"routes\" reference is different: ", sampleInst.routes, sampleTemplate.routes);
         assertNotSame("Testing \"nodes\" reference is different: ", sampleInst.nodes, sampleTemplate.nodes);
         assertNotSame("Testing \"start\" reference is different: ", sampleInst.start, sampleTemplate.start);
-        assertNotSame("Testing Test Property reference is different: ", sampleInst.getNode("syncStart").getProperties()
-                .get("TestProperty"), sampleTemplate.getNode("syncStart").getProperties().get("TestProperty"));
+        assertNotSame("Testing Test Property reference is different: ",
+                sampleInst.getNode("syncStart").getProperties().get("TestProperty"),
+                sampleTemplate.getNode("syncStart").getProperties().get("TestProperty"));
     }
-    
+
     @Test
     public void SampleKillAndGetPlayableTest() throws InvalidGraphException, GraphElementNotFoundException {
-        NarrativeInstance sampleInst = sampleTemplate.generateInstance2();
+        NarrativeInstance sampleInst = sampleTemplate.generateInstance();
 
         assertEquals("Testing playable routes: ", 5, sampleInst.getPlayableRoutes().size());
         assertEquals("", 1, sampleInst.activeNodes.size());
-       
+
         sampleInst.kill("routeMike1");
         assertEquals("Testing kill method: ", 20, sampleInst.routes.size());
         assertEquals("Testing kill method: ", 10, sampleInst.nodes.size());
-        
+
         assertEquals("Testing playable routes: ", 4, sampleInst.getPlayableRoutes().size());
 
         sampleInst.startRoute("routeSarah1");
@@ -279,12 +282,12 @@ public class NarrativeInstanceTest {
 
         assertEquals("", 2, sampleInst.activeNodes.size());
         assertEquals("Testing playable routes: ", 5, sampleInst.getPlayableRoutes().size());
-        
+
         sampleInst.kill("routeSarah4");
         assertEquals("Testing kill method: ", 18, sampleInst.routes.size());
         assertEquals("Testing kill method: ", 10, sampleInst.nodes.size());
     }
-    
+
     /**
      * This test creates an NarrativeInstance and simulates a playthrough.
      * 
@@ -293,36 +296,43 @@ public class NarrativeInstanceTest {
      */
     @Test
     public void makeChoicesTest() throws InvalidGraphException, GraphElementNotFoundException {
-    	NarrativeInstance choiceInst = sampleTemplate.generateInstance2();
-    	
-    	assertEquals("Check only one active node", 1, choiceInst.activeNodes.size());
-    	
-    	String firstChoice = choiceInst.getPlayableRoutes().get(0).getId();
-    	assertTrue("Check this route is one of the first routes", choiceInst.start.getExiting().contains(choiceInst.routes.get(firstChoice)));
-    	assertEquals("routeMike1", firstChoice);
-    	
-    	choiceInst.routes.get(firstChoice).createProperties();
-    	choiceInst.routes.get(firstChoice).getProperties().putBoolean("Correct", true);
-    	BaseBundle firstChoiceStarted = choiceInst.startRoute(firstChoice);
-    	assertTrue("Check properties returned correctly", firstChoiceStarted.getBoolean("Correct"));
-    	
-    	GameChoice firstChoiceEnded = choiceInst.endRoute(firstChoice);
-    	assertEquals("Check only two active nodes", 2, choiceInst.activeNodes.size());
-    	assertEquals("Check playable routes increased", 6, choiceInst.getPlayableRoutes().size());
-    	assertFalse("Check firstChoice no longer playable", choiceInst.getPlayableRoutes().contains(choiceInst.routes.get(firstChoice)));
-    	assertEquals("Check firstChoiceEnded has correct action", GameChoice.ACTION_MAJOR_DECISION, firstChoiceEnded.getAction());
-    	assertEquals("Check firstChoiceEnded has correct number of exiting routes", 2, firstChoiceEnded.getOptions().size());
-    	
-    	String secondChoice = firstChoiceEnded.getOptions().get(1).getId();
-    	choiceInst.startRoute(secondChoice);
-    	GameChoice secondChoiceEnded = choiceInst.endRoute(secondChoice);
-    	assertEquals("Check only one active node left", 1, choiceInst.activeNodes.size());
-    	assertEquals("Check playable routes decreased", 4, choiceInst.getPlayableRoutes().size());
-    	assertEquals("Check secondChoiceEnded has correct action", GameChoice.ACTION_CHOOSE_ROUTE, secondChoiceEnded.getAction());
-    	assertEquals("Check secondChoiceEnded has correct number of exiting routes", 4, secondChoiceEnded.getOptions().size());
-    	assertFalse("Check other route no longer playable", choiceInst.getPlayableRoutes().contains(firstChoiceEnded.getOptions().get(0)));    	
+        NarrativeInstance choiceInst = sampleTemplate.generateInstance();
+
+        assertEquals("Check only one active node", 1, choiceInst.activeNodes.size());
+
+        String firstChoice = choiceInst.getPlayableRoutes().get(0).getId();
+        assertTrue("Check this route is one of the first routes",
+                choiceInst.start.getExiting().contains(choiceInst.routes.get(firstChoice)));
+        assertEquals("routeMike1", firstChoice);
+
+        choiceInst.routes.get(firstChoice).createProperties();
+        choiceInst.routes.get(firstChoice).getProperties().putBoolean("Correct", true);
+        BaseBundle firstChoiceStarted = choiceInst.startRoute(firstChoice);
+        assertTrue("Check properties returned correctly", firstChoiceStarted.getBoolean("Correct"));
+
+        GameChoice firstChoiceEnded = choiceInst.endRoute(firstChoice);
+        assertEquals("Check only two active nodes", 2, choiceInst.activeNodes.size());
+        assertEquals("Check playable routes increased", 6, choiceInst.getPlayableRoutes().size());
+        assertFalse("Check firstChoice no longer playable",
+                choiceInst.getPlayableRoutes().contains(choiceInst.routes.get(firstChoice)));
+        assertEquals("Check firstChoiceEnded has correct action", GameChoice.ACTION_MAJOR_DECISION,
+                firstChoiceEnded.getAction());
+        assertEquals("Check firstChoiceEnded has correct number of exiting routes", 2,
+                firstChoiceEnded.getOptions().size());
+
+        String secondChoice = firstChoiceEnded.getOptions().get(1).getId();
+        choiceInst.startRoute(secondChoice);
+        GameChoice secondChoiceEnded = choiceInst.endRoute(secondChoice);
+        assertEquals("Check only one active node left", 1, choiceInst.activeNodes.size());
+        assertEquals("Check playable routes decreased", 4, choiceInst.getPlayableRoutes().size());
+        assertEquals("Check secondChoiceEnded has correct action", GameChoice.ACTION_CHOOSE_ROUTE,
+                secondChoiceEnded.getAction());
+        assertEquals("Check secondChoiceEnded has correct number of exiting routes", 4,
+                secondChoiceEnded.getOptions().size());
+        assertFalse("Check other route no longer playable",
+                choiceInst.getPlayableRoutes().contains(firstChoiceEnded.getOptions().get(0)));
     }
-    
+
     @Test
     public void loadTest() throws InvalidGraphException {
 
@@ -331,23 +341,23 @@ public class NarrativeInstanceTest {
         loadTemplate.nodes.putAll(loadNodes);
         loadTemplate.start = (SynchronizationNode) loadTemplate.getNode("start");
 
-        NarrativeInstance loadInst = loadTemplate.generateInstance2();
+        NarrativeInstance loadInst = loadTemplate.generateInstance();
         assertTrue("Testing load test constructor: ", loadInst.routes.containsKey("route10101"));
     }
 
-    @Test(expected = InvalidGraphException.class) 
+    @Test(expected = InvalidGraphException.class)
     public void testErrorThrownIn1() throws InvalidGraphException {
         sampleTemplate.start = null;
-        
+
         @SuppressWarnings("unused")
-		NarrativeInstance sampleInst = sampleTemplate.generateInstance();
+        NarrativeInstance sampleInst = sampleTemplate.generateInstance();
     }
-    
-    @Test(expected = InvalidGraphException.class) 
+
+    @Test(expected = InvalidGraphException.class)
     public void testErrorThrownIn2() throws InvalidGraphException {
         sampleTemplate.start = null;
-        
+
         @SuppressWarnings("unused")
-		NarrativeInstance sampleInst = sampleTemplate.generateInstance2();
+        NarrativeInstance sampleInst = sampleTemplate.generateInstance();
     }
 }

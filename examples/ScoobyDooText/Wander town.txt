@@ -1,0 +1,6 @@
+#ifx Town.D
+Daphne: (to herself) "I could just swim back now the loch is clear, but there might be a boat nearby"
+#endif
+#ifx Town.F
+Fred(to himself) "I'm sure I saw a speed boat somewher on the left, but it mught be easier to swim now the mist has cleared"
+#endif

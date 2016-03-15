@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.ac.cam.echo2016.multinarrative.preview.FXMLController">
+   <center>
+      <WebView fx:id="web" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <ScrollPane fx:id="scroll" BorderPane.alignment="CENTER">
+         <content>
+            <HBox fx:id="choices" alignment="CENTER" spacing="3.0">
+               <children>
+                  <Button fx:id="next" mnemonicParsing="false" onAction="#onNext" text="Next" />
+               </children>
+            </HBox>
+         </content>
+      </ScrollPane>
+   </bottom>
+</BorderPane>

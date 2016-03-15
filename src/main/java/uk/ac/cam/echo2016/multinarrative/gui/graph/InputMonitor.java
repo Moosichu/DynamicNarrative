@@ -6,6 +6,12 @@ import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import uk.ac.cam.echo2016.multinarrative.dev.Debug;
 
+/**
+ * Class to deal with input to the graph
+ * 
+ * @author jr650
+ *
+ */
 public class InputMonitor {
 
 	private EventHandler<MouseEvent> dragStartHandler;
@@ -15,6 +21,10 @@ public class InputMonitor {
 	private EventHandler<MouseEvent> mouseDraggedEventHandler;
 	private EventHandler<MouseEvent> mouseReleasedEventHandler;
 
+	/**
+	 * Creates a monitor for the given graph
+	 * @param graph graph to monitor
+	 */
 	public InputMonitor(final Graph graph) {
 
 		mousePressedEventHandler = event -> {
@@ -30,11 +40,11 @@ public class InputMonitor {
 				} else if (graphElement instanceof GraphEdge) {
 					Debug.logInfo("Mouse Pressed on Edge", 5, Debug.SYSTEM_GUI);
 					graph.getTool().mousePressedOnEdge(event, (GraphEdge) graphElement);
-				} else{
+				} else {
 					Debug.logInfo("Mouse Pressed", 5, Debug.SYSTEM_GUI);
 					graph.getTool().mousePressed(event);
 				}
-			}else{
+			} else {
 				Debug.logInfo("Mouse Pressed", 5, Debug.SYSTEM_GUI);
 				graph.getTool().mousePressed(event);
 			}
@@ -80,6 +90,10 @@ public class InputMonitor {
 		};
 	}
 
+	/**
+	 * Add handler to graph components
+	 * @param node node to add handlers for
+	 */
 	public void registerHandlerFor(Node node) {
 		node.setOnDragDetected(dragStartHandler);
 		node.setOnMouseDragReleased(dragReleasedHandler);

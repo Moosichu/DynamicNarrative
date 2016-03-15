@@ -8,12 +8,11 @@ import uk.ac.cam.echo2016.multinarrative.io.SaveWriter;
 
 import java.io.IOException;
 
-
 public class SaveTest {
 
     GUINarrative gNarr;
 
-    //Taken from GUINarrativeTest
+    // Taken from GUINarrativeTest
     @Before
     public void setup() throws IOException {
         gNarr = new GUINarrative();
@@ -45,7 +44,7 @@ public class SaveTest {
         gNarr.addRoute(l5);
         gNarr.start = s1;
 
-        SaveWriter.saveObject("test.gui",gNarr);
+        SaveWriter.saveObject("test.gui", gNarr);
         gNarr = null;
         gNarr = SaveReader.loadGUINarrative("test.gui");
     }
@@ -78,7 +77,7 @@ public class SaveTest {
     }
 
     @Test
-    public void loadCastTest() throws IOException{
+    public void loadCastTest() throws IOException {
         NarrativeInstance inst = new NarrativeInstance();
         SaveWriter.saveObject("test.inst", inst);
         inst = null;

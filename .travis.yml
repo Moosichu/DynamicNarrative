@@ -1,4 +1,5 @@
 language: java
+sudo: required
 jdk:
   - oraclejdk8
 notifications:
@@ -9,10 +10,8 @@ notifications:
     secure: uGXPSGN61zqkC3s26Zske3cg5rUZizu5XKO8yYEh568uECsv/FqDbmfkJvHRzYb3wvJVzawrX5g6KOs/vdpUop0ljxzeGUOhUZM42KLLcPnAojM7KOqZoONW5OBKkV3mk4X+sqDC81ptcNQrEGMQY+La6DRWXI+gXKbyOa4E322gWvL2sATZs58YPnFUbFUvnGa1LYran2joV5KFxtZgQZFbMmfQFgl/6FY5J6uStvIaxR+B24MQ4eL518EdKWYxMyB9q+sBdb8YS4ljWg+jv9IH4a8TPYHUzsOExdAJoYK1ksVCwlN5LPyhpC75Tu7aZACobnQLHHe+oaQEoFScgk6TJdWwknlK+HesAuUBo1Llzd/NEfBYj/crVbFjhW42IyjxipmeELZvYaxCuI5EOKOZtxyBlBD4o4+BhioiW4O+Aq0LcmFN5gnnWxMhLxZ538vBljRIZhgdGsbgnUgwM5Rs21oYZgcoiRlmjBRkm0LolJlGeT1RNFXeab/Blf4ZAGCxTxE+4GxR0QBvQu99rXPu2s8fm7f+lYdjQzORMmyrtuMspmoIIa0HQDqncxymXUtY/4W8OmlXxH4D+wOREr9CJUcqaeb566TH2K//L1RV4c8JAucnJeg4C87i6O3AuvT9nhjfiF28C1Je4fchEWAGkbgbRtdh0Fc8/N2d2vE=
 
 before_install:
-    - rm -rf ~/.linuxbrew
-    - yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"
-    - export PATH="$HOME/.linuxbrew/bin:$PATH"
-    - export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
-    - export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
-    - brew install jdk
-    - export JAVA_HOME=/home/travis/.linuxbrew/Cellar/jdk/1.8.0-60
+  - sudo apt-get update -qq;
+  - sudo /bin/echo -e oracle-java9-installer shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections;
+  - sudo apt-get install -y oracle-java9-installer;
+  - sudo apt-get install -y oracle-java9-unlimited-jce-policy;
+  - sudo update-java-alternatives -s java-9-oracle;

@@ -1,0 +1,6 @@
+#ifx Haggis.ScSh
+Shaggy: "I think I can see the others!"
+#endif
+#ifnx Haggis.ScSh
+Daphne: (to herself) "Oh, I think I can see the others"
+#endif

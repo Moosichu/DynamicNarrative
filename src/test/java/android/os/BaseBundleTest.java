@@ -5,7 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BaseBundleTest {
-    @Test public void testSetAndGetBoolean() {
+    @Test
+    public void testSetAndGetBoolean() {
         BaseBundle baseBundle = new BaseBundle();
 
         final String testKey1 = "Test";

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class SaveWriter {
-    public static void saveObject(String filename, Object toSave) throws IOException{
+    public static void saveObject(String filename, Object toSave) throws IOException {
         ObjectOutputStream oos = null;
         try {
             oos = new ObjectOutputStream(new FileOutputStream(filename));

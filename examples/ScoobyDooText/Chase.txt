@@ -1,0 +1,20 @@
+#ifx Resist.ShSc
+Scooby bats at the giant head as the two of them are shaken by the monster.
+#endif
+#ifx Haggis.ScSh
+#ifx Swim.D
+Fred tries to lose the monster's grip on the boat but to no avail.
+#endif
+#ifx Swim.F
+Daphne tries to lose the monster's grip on the boat but to no avail.
+#endif
+#endif
+#ifx Swim3.D
+Dapne swims up the scene, but seems helpless before such a creature.
+#endif
+#ifx Speed
+#ifx Haggis.ScSh
+Fred slams the boat into the side of the monster.
+It recoils, dropping the other boat into the water.
+#endif
+#endif

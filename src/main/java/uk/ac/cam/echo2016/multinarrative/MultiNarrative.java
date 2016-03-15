@@ -13,7 +13,8 @@ import android.os.BaseBundle;
  * @version 1.0
  * @see GUINarrative
  */
-public abstract class MultiNarrative implements Serializable { //TODO Documentation
+public abstract class MultiNarrative implements Serializable { // TODO
+                                                               // Documentation
     private static final long serialVersionUID = 1;
     protected HashMap<String, Route> routes = new HashMap<String, Route>();
     protected HashMap<String, Node> nodes = new HashMap<String, Node>();
@@ -23,18 +24,18 @@ public abstract class MultiNarrative implements Serializable { //TODO Documentat
     public MultiNarrative() {
         properties.putStringArrayList("System.Types", new ArrayList<String>());
     }
-    
+
     // TODO change ALL getters and setters to protected?
     public Node getNode(String id) {
         return nodes.get(id);
     }
-    
+
     public HashMap<String, Node> getNodes() {
-    	return nodes;
+        return nodes;
     }
-    
+
     public HashMap<String, Route> getRoutes() {
-    	return routes;
+        return routes;
     }
 
     public Route getRoute(String id) {
@@ -51,5 +52,9 @@ public abstract class MultiNarrative implements Serializable { //TODO Documentat
 
     public BaseBundle getNodeProperties(String id) {
         return getNode(id).getProperties();
+    }
+    
+    public Node getStart(){
+        return start;
     }
 }

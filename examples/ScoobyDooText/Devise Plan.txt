@@ -1,0 +1,9 @@
+#ifx DriveAway.DV
+Fred: "What can we do now?"
+#endif
+#ifx DriveAway.FV
+Fred: "We need a plan.."
+#endif
+Velma: "I have an idea..."
+
+The mist begins to clear, and the loch coalesces into view.

@@ -8,7 +8,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 
 if(JavaVersion.current() != JavaVersion.VERSION_1_8){
-    throw new GradleException("This build must be run with java 8")
+  throw new GradleException("This build must be run with java 8")
 }
 
 repositories {
@@ -22,11 +22,11 @@ dependencies {
 }
 
 compileJava {
-    options.compilerArgs << "-Xlint:all"
+  options.compilerArgs << "-Xlint:all"
 }
 
 compileTestJava {
-    options.compilerArgs << "-Xlint:all"
+  options.compilerArgs << "-Xlint:all"
 }
 
 test {
@@ -41,30 +41,82 @@ test {
 
   // listen to events in the test execution lifecycle
   beforeTest { descriptor ->
-     logger.lifecycle("Running test: " + descriptor)
+    logger.lifecycle("Running test: " + descriptor)
   }
 }
 
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+    attributes 'Implementation-Title': 'DyNaMo Fat Jar',
+        	   //'Implementation-Version': version,
+        	     'Main-Class': 'uk.ac.cam.echo2016.multinarrative.gui.FXMLGUI'
+  }
+  baseName = project.name + '-all'
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
+}
+
 task copyFXMLandCSS (type: Copy) {
-    from main_src
-    into main_build
-    include('**/*.fxml', '**/*.css')
+  from main_src
+  into main_build
+  include('**/*.fxml', '**/*.css')
 }
 
 task copyConfig (type: Copy) {
-    from main_src
-    into main_build
-    include('**/*.json')
+  from main_src
+  into main_build
+  include('**/*.json')
 }
 
 assemble.dependsOn copyFXMLandCSS
 assemble.dependsOn copyConfig
 
-task runGui(type: JavaExec) {
-      classpath = sourceSets.main.runtimeClasspath
-      workingDir = main_build
-      main = 'uk.ac.cam.echo2016.multinarrative.gui.FXMLGUI'
+task runEditor(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = main_build
+  main = 'uk.ac.cam.echo2016.multinarrative.gui.FXMLGUI'
 }
 
-runGui.dependsOn assemble
+task runTextPreview(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	workingDir = main_build
+  main = 'uk.ac.cam.echo2016.multinarrative.preview.TextPreview'
+	standardInput = System.in
+    if(project.hasProperty('directory')) {
+      args directory
+    } else {
+      println 'Usage: ./gradlew -Pdirectory=<directory> runTextPreview'
+    }
+}
 
+task runHTMLPreview(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	workingDir = main_build
+  main = 'uk.ac.cam.echo2016.multinarrative.preview.HTMLPreview'
+
+  if(project.hasProperty('directory')) {
+    args directory
+  } else {
+    println 'Usage: ./gradlew -Pdirectory=<directory> runHTMLPreview'
+  }
+}
+
+runEditor.dependsOn assemble
+runTextPreview.dependsOn assemble
+runHTMLPreview.dependsOn assemble
+
+task runScoobyDooText(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	workingDir = main_build
+  standardInput = System.in
+  main = 'uk.ac.cam.echo2016.multinarrative.preview.TextPreview'
+  args "../../../examples/ScoobyDooText"
+}
+
+task runScoobyDooHTML(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	workingDir = main_build
+  main = 'uk.ac.cam.echo2016.multinarrative.preview.HTMLPreview'
+  args "../../../examples/ScoobyDooHTML"
+}

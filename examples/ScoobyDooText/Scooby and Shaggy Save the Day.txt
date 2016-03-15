@@ -1,0 +1,18 @@
+#ifx Row
+#ifx Haggis.ScSh
+Daphne, Scooby and Shaggy arrive after rowing across the loch
+#endif
+#ifnx Haggis.ScSh
+Daphne arrives after rowing across the loch
+#endif
+#endif
+#ifx Haggis.ScSh
+Scooby: "Raggy..."
+Shaggy: "Scoobes! You're a genius!"
+Together Shaggy and Scooby throw custard covered haggis at the monster.
+The haggis is so salty it begins to corrode the scales, exposing electronics underneath.
+These crackle and spark as the water begins to enter the shell.
+#endif
+#ifx Resist.ShSc
+Scooby and Shaggy ram their boat into the side of the monster. Sparks crackle and the moster stops moving.
+#endif

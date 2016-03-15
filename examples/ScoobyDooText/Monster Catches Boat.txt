@@ -1,0 +1,24 @@
+#ifx Resist.ShSc
+Shaggy and Scooby stare the monster in the eye for a moment before it snatches their boat out of the water, 
+lifting the duo high into the air.
+Shaggy: "Like whatda we do now Scoobes?"
+#endif
+#ifx Haggis.ScSh
+#ifx Swim.D
+Catching up with the boat the monster lifts Velma and Fred into the air.
+#endif
+#ifx Swim.F
+Catching up with the boat the monster lifts Velma and Daphne into the air.
+#endif
+#endif
+#ifx Swim3.D
+Dapne swims up the scene, but seems helpless before such a creature.
+#endif
+#ifx Speed
+#ifx Haggis.ScSh
+Fred, Scooby and Shaggy arrive in the speed boat, and gape at the predicament of Velma and Daphne
+#endif
+#ifnx Haggis.ScSh
+Fred arrives in the speed boat, and gapes at the predicament of Velma, Daphne, Scooby and Shaggy.
+#endif
+#endif

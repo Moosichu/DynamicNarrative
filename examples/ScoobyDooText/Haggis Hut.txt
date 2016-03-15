@@ -1,0 +1,28 @@
+#ifx Haggis.ScSh
+Shaggy: "Scoobes! Look at this Haggis right here, it's got a appointment with my stomach"
+Scooby: *Uuuumm hhuuuummnnnnn*
+#ifx Swim.F
+Fred enters the hut, drenched, and immediately spots the diners...
+Fred: "Come on guys! We've got to go find Daphne and Velma!"
+#endif
+#ifx Swim.D
+Daphne enters the hut, drenched, and immediately spots the diners...
+Dapne: "Shaggy! Now's not the time, we've got a monster to catch! Come on!"
+#endif
+They leave with Shaggy stuffing haggis into his pockets...
+#endif
+#ifnx Haggis.ScSh
+#ifx Swim.F
+Fred climbs from the loch, soaked, and enters the hut.
+As he warms up by the fire the mist starts to clear,
+#endif
+#ifx Swim.D
+Daphne climbs from the loch, drenched, and enters the hut.
+As she warms up by the fire the mist starts to clear.
+#endif
+#endif
+#ifx Swim.F
+Fred: (to himself) "I'm sure I saw a spare speed boat arround here earlier"
+#endif
+
+There must be a boat or something in the town...

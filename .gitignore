@@ -27,3 +27,4 @@ test.template
 
 config.json
 
+examples/**/index.html

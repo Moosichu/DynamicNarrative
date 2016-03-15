@@ -8,9 +8,9 @@ package uk.ac.cam.echo2016.multinarrative;
 
 public class InvalidGraphException extends Exception {
 
-	private static final long serialVersionUID = 1L;
-	
-	public InvalidGraphException() {
+    private static final long serialVersionUID = 1L;
+
+    public InvalidGraphException() {
         super();
     }
 

@@ -1,0 +1,107 @@
+root { 
+    display: block;
+}
+
+.menu-bar, .list-view, .label, .button, .tab .tab-label, 
+.combo-box > .list-cell, .text-input, .list-cell, 
+.radio-button, .titled-pane,
+#label, #infoBar {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 40;
+}
+
+.check-box > .text, .whiteText, #infoBar {
+    -fx-fill: white;
+    -fx-font-size: 40;
+}
+
+.list-cell:odd {
+    -fx-background-color: #2a2a2a;
+}
+
+.list-cell:even, #graphArea  {
+    -fx-background-color: #222222;
+}
+
+.list-cell:focused, .list-cell:hover {
+    -fx-background-color: #457894;
+}
+
+.root, .list-view, .pane, .titled-pane > .content,
+.titled-pane:focused, .tab-pane .tab, 
+#propertyPane, #baseline, #root, .tool-bar {
+    -fx-background-color: #333333;
+}
+
+.button, .combo-box-base,.text-field, .titled-pane.contents, 
+.radio-button .radio, .titled-pane > .title, 
+.menu-bar, .check-box >.box {
+    -fx-background-color:
+        #222222,
+        #333333;
+    -fx-background-insets: 0, 1;
+}
+
+.button:hover, .text-field:focused, .titled-pane:expanded > .title, .scroll-bar .thumb{
+    -fx-background-color:
+        #222222,
+        #457894;
+    -fx-background-insets: 0, 1;
+}
+
+.button:pressed {
+    -fx-background-color:
+        #222222,
+        derive(#457894,0.5);
+}
+
+.menu-bar, .context-menu, #baseline {
+    -fx-background-color: #222222;
+}
+.menu-bar, .titled-pane > .title, #baseline {
+    -fx-background-radius: 6;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #457894;
+}
+
+.radio-button .dot {
+	-fx-mark-highlight-color: #457894;
+	-fx-mark-color: #457894;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab .tab-label, .titled-pane, .border-pane, .titled-pane > .content,
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator, 
+#label { 
+    -fx-border-color: transparent;  
+}
+
+.scroll-pane, .scroll-pane > .viewport, .scroll-bar, .titled-pane, .scroll-pane > .corner {
+	-fx-background-color: transparent; 
+}
+
+.scroll-pane,.titled-pane {
+	-fx-control-inner-background: transparent;
+}
+
+#drawingPane {
+  -fx-background-color: transparent;
+  -fx-opacity: 0;
+}
+
+#baseline {
+  -fx-opacity: 1;
+}
+
+#recolour {
+	-fx-color-label-visible: false;
+}
+
+
+

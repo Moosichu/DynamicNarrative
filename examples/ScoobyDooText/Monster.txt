@@ -1,0 +1,20 @@
+The monster rears it's head menacingly,
+#ifx Resist.ShSc
+it starts to move toward Scooby and Shaggy.
+Shaggy: "Zoinks!"
+Scooby jumps into Shaggy's arms in alarm.
+Shaggy: "Scoobe! I like gotta drive this boat!"
+#endif
+#ifx Haggis.ScSh
+it starts to move towards the boat.
+#ifx Swim.D
+Fred manouvers the boat out the way, gunning the engine as the boat leaps across the water.
+#endif
+#ifx Swim3.F
+Fred manouvers the boat out the way, gunning the engine as the boat leaps across the water.
+#endif
+#ifx Speed
+Daphne grabs the controls and the boat races away from the monster.
+#endif
+The monster partially submerges to chase them, gaining fast!
+#endif

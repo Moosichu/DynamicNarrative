@@ -13,20 +13,15 @@ public class GraphElementNotFoundException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public GraphElementNotFoundException() {
-        super();
+    private String item;
+
+    public GraphElementNotFoundException(String s) {
+        super(s + " not found");
+        item = s;
     }
 
-    public GraphElementNotFoundException(String message) {
-        super(message);
-    }
-
-    public GraphElementNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public GraphElementNotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public String getItem() {
+        return item;
     }
 
 }

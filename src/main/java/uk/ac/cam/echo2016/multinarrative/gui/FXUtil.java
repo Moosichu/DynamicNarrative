@@ -4,6 +4,12 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.paint.Color;
 
+/**
+ * Util for FX classes
+ * 
+ * @author jr650
+ *
+ */
 public class FXUtil {
 
 	private FXUtil() {
@@ -11,6 +17,7 @@ public class FXUtil {
 
 	/**
 	 * Converts a colour to it's RGB hex code
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -21,9 +28,20 @@ public class FXUtil {
 		return "#" + (r.length() == 1 ? "0" + r : r) + (g.length() == 1 ? "0" + g : g)
 				+ (b.length() == 1 ? "0" + b : b);
 	}
-	
-	public static DoubleBinding degreesAngle(DoubleBinding x, DoubleBinding y){
-		return Bindings.createDoubleBinding(() -> (x.get()<0?-180:0)+Math.atan(y.get()/x.get())*180/Math.PI, x, y);
+
+	/**
+	 * Creates a binding, giving the angle from the gradient given
+	 * 
+	 * @param x
+	 *            x distance
+	 * @param y
+	 *            y distance
+	 * @return new double binding bound to the angle of rotation to align with
+	 *         the given numbers
+	 */
+	public static DoubleBinding degreesAngle(DoubleBinding x, DoubleBinding y) {
+		return Bindings.createDoubleBinding(
+				() -> (x.get() < 0 ? -180 : 0) + Math.atan(y.get() / x.get()) * 180 / Math.PI, x, y);
 	}
 
 }
